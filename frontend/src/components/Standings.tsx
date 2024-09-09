@@ -1,35 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent } from '@mui/material';
-import { fetchStandings } from '../services/espnApi';
-
-interface TeamStanding {
-  teamId: string;
-  teamName: string;
-  wins: number;
-  losses: number;
-  ties: number;
-  winPercentage: number;
-}
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent, Avatar } from '@mui/material';
+import { fetchStandings, fetchTeams } from '../services/espnApi';
+import { TeamStanding, Team } from '../types';
 
 const Standings: React.FC = () => {
   const [standings, setStandings] = useState<TeamStanding[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const getStandings = async () => {
+    const fetchData = async () => {
       try {
-        const fetchedStandings = await fetchStandings();
+        const [fetchedStandings, fetchedTeams] = await Promise.all([
+          fetchStandings(),
+          fetchTeams()
+        ]);
         setStandings(fetchedStandings);
+        setTeams(fetchedTeams);
       } catch (err) {
-        setError('Failed to fetch standings');
+        setError('Failed to fetch data');
       } finally {
         setLoading(false);
       }
     };
 
-    getStandings();
+    fetchData();
   }, []);
+
+  const getTeamLogo = (teamId: string) => {
+    const team = teams.find(t => t.id === teamId);
+    return team ? team.logoUrl : '';
+  };
 
   if (loading) {
     return <CircularProgress />;
@@ -57,7 +59,10 @@ const Standings: React.FC = () => {
             <TableBody>
               {standings.map((standing) => (
                 <TableRow key={standing.teamId}>
-                  <TableCell>{standing.teamName}</TableCell>
+                  <TableCell>
+                    <Avatar src={getTeamLogo(standing.teamId)} alt={standing.teamName} className="team-logo" />
+                    {standing.teamName}
+                  </TableCell>
                   <TableCell>{standing.wins}</TableCell>
                   <TableCell>{standing.losses}</TableCell>
                   <TableCell>{standing.ties}</TableCell>

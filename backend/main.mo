@@ -14,6 +14,7 @@ actor {
     name: Text;
     division: Text;
     conference: Text;
+    logoUrl: Text;
   };
 
   type TeamStanding = {
@@ -29,8 +30,8 @@ actor {
   // Initialize data (in a real scenario, this would be populated from a trusted source)
   private func initData() {
     teams := [
-      { id = "NE"; name = "New England Patriots"; division = "AFC East"; conference = "AFC" },
-      { id = "BUF"; name = "Buffalo Bills"; division = "AFC East"; conference = "AFC" },
+      { id = "NE"; name = "New England Patriots"; division = "AFC East"; conference = "AFC"; logoUrl = "https://static.www.nfl.com/image/private/f_auto/league/moyfxx3dq5pio4aiftnc" },
+      { id = "BUF"; name = "Buffalo Bills"; division = "AFC East"; conference = "AFC"; logoUrl = "https://static.www.nfl.com/image/private/f_auto/league/giphcy6ie9mxbnldntsf" },
       // Add more teams...
     ];
 

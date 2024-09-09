@@ -16,6 +16,7 @@ export interface Team {
   name: string;
   division: string;
   conference: string;
+  logoUrl: string;
 }
 
 export interface TeamStanding {

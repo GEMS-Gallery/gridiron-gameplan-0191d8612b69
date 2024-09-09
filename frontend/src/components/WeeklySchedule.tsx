@@ -1,39 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { fetchWeeklySchedule } from '../services/espnApi';
-
-interface Game {
-  id: string;
-  homeTeam: string;
-  awayTeam: string;
-  date: string;
-  venue: string;
-  homeScore: number | null;
-  awayScore: number | null;
-}
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent, Select, MenuItem, FormControl, InputLabel, Avatar } from '@mui/material';
+import { fetchWeeklySchedule, fetchTeams } from '../services/espnApi';
+import { Game, Team } from '../types';
 
 const WeeklySchedule: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [week, setWeek] = useState(1);
 
   useEffect(() => {
-    const getGames = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
-        const fetchedGames = await fetchWeeklySchedule(week);
+        const [fetchedGames, fetchedTeams] = await Promise.all([
+          fetchWeeklySchedule(week),
+          fetchTeams()
+        ]);
         setGames(fetchedGames);
+        setTeams(fetchedTeams);
       } catch (err) {
-        setError('Failed to fetch games');
+        setError('Failed to fetch data');
       } finally {
         setLoading(false);
       }
     };
 
-    getGames();
+    fetchData();
   }, [week]);
+
+  const getTeamLogo = (teamName: string) => {
+    const team = teams.find(t => t.name === teamName);
+    return team ? team.logoUrl : '';
+  };
 
   if (loading) {
     return <CircularProgress />;
@@ -76,8 +77,14 @@ const WeeklySchedule: React.FC = () => {
               {games.map((game) => (
                 <TableRow key={game.id}>
                   <TableCell>{new Date(game.date).toLocaleDateString()}</TableCell>
-                  <TableCell>{game.homeTeam}</TableCell>
-                  <TableCell>{game.awayTeam}</TableCell>
+                  <TableCell>
+                    <Avatar src={getTeamLogo(game.homeTeam)} alt={game.homeTeam} className="team-logo" />
+                    {game.homeTeam}
+                  </TableCell>
+                  <TableCell>
+                    <Avatar src={getTeamLogo(game.awayTeam)} alt={game.awayTeam} className="team-logo" />
+                    {game.awayTeam}
+                  </TableCell>
                   <TableCell>{game.venue}</TableCell>
                   <TableCell>
                     {game.homeScore !== null && game.awayScore !== null

@@ -1,34 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Card, CardContent, Typography, CircularProgress, Grid, Paper } from '@mui/material';
-import { fetchGameDetails } from '../services/espnApi';
-
-interface Game {
-  id: string;
-  homeTeam: string;
-  awayTeam: string;
-  date: string;
-  venue: string;
-  homeScore: number | null;
-  awayScore: number | null;
-  status: string;
-  quarter?: string;
-  timeRemaining?: string;
-}
+import { Card, CardContent, Typography, CircularProgress, Grid, Paper, Avatar } from '@mui/material';
+import { fetchGameDetails, fetchTeams } from '../services/espnApi';
+import { Game, Team } from '../types';
 
 const GameDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [game, setGame] = useState<Game | null>(null);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const getGameDetails = async () => {
+    const fetchData = async () => {
       if (!id) return;
 
       try {
-        const fetchedGame = await fetchGameDetails(id);
+        const [fetchedGame, fetchedTeams] = await Promise.all([
+          fetchGameDetails(id),
+          fetchTeams()
+        ]);
         setGame(fetchedGame);
+        setTeams(fetchedTeams);
       } catch (err) {
         setError('Failed to fetch game details');
       } finally {
@@ -36,8 +29,13 @@ const GameDetails: React.FC = () => {
       }
     };
 
-    getGameDetails();
+    fetchData();
   }, [id]);
+
+  const getTeamLogo = (teamName: string) => {
+    const team = teams.find(t => t.name === teamName);
+    return team ? team.logoUrl : '';
+  };
 
   if (loading) {
     return <CircularProgress />;
@@ -58,12 +56,14 @@ const GameDetails: React.FC = () => {
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <Paper elevation={3} sx={{ p: 2 }}>
+              <Avatar src={getTeamLogo(game.homeTeam)} alt={game.homeTeam} className="team-logo" />
               <Typography variant="h5" gutterBottom>{game.homeTeam}</Typography>
               <Typography variant="h3">{game.homeScore ?? 'TBD'}</Typography>
             </Paper>
           </Grid>
           <Grid item xs={12} md={6}>
             <Paper elevation={3} sx={{ p: 2 }}>
+              <Avatar src={getTeamLogo(game.awayTeam)} alt={game.awayTeam} className="team-logo" />
               <Typography variant="h5" gutterBottom>{game.awayTeam}</Typography>
               <Typography variant="h3">{game.awayScore ?? 'TBD'}</Typography>
             </Paper>

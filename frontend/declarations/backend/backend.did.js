@@ -10,6 +10,7 @@ export const idlFactory = ({ IDL }) => {
     'conference' : IDL.Text,
     'name' : IDL.Text,
     'division' : IDL.Text,
+    'logoUrl' : IDL.Text,
   });
   return IDL.Service({
     'getStandings' : IDL.Func([], [IDL.Vec(TeamStanding)], ['query']),

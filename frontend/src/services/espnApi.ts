@@ -5,11 +5,11 @@ import { Game, Team, TeamStanding } from '../types';
 
 // Simulated data
 const teams: Team[] = [
-  { id: 'NE', name: 'New England Patriots', division: 'AFC East', conference: 'AFC' },
-  { id: 'BUF', name: 'Buffalo Bills', division: 'AFC East', conference: 'AFC' },
-  { id: 'MIA', name: 'Miami Dolphins', division: 'AFC East', conference: 'AFC' },
-  { id: 'NYJ', name: 'New York Jets', division: 'AFC East', conference: 'AFC' },
-  // Add more teams...
+  { id: 'NE', name: 'New England Patriots', division: 'AFC East', conference: 'AFC', logoUrl: 'https://static.www.nfl.com/image/private/f_auto/league/moyfxx3dq5pio4aiftnc' },
+  { id: 'BUF', name: 'Buffalo Bills', division: 'AFC East', conference: 'AFC', logoUrl: 'https://static.www.nfl.com/image/private/f_auto/league/giphcy6ie9mxbnldntsf' },
+  { id: 'MIA', name: 'Miami Dolphins', division: 'AFC East', conference: 'AFC', logoUrl: 'https://static.www.nfl.com/image/private/f_auto/league/8umt0qoqwbhbcuhibavu' },
+  { id: 'NYJ', name: 'New York Jets', division: 'AFC East', conference: 'AFC', logoUrl: 'https://static.www.nfl.com/image/private/f_auto/league/ekijosiae96gektbo4iw' },
+  // Add more teams with their respective logo URLs...
 ];
 
 const generateSchedule = (week: number): Game[] => {

@@ -26,6 +26,9 @@ const App: React.FC = () => {
           <Route path="/standings" element={<Standings />} />
           <Route path="/game/:id" element={<GameDetails />} />
         </Routes>
+        <Typography variant="caption" display="block" textAlign="center" mt={2}>
+          All team logos are property of the NFL and their respective teams.
+        </Typography>
       </Container>
     </Box>
   );

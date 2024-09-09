@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent, Avatar } from '@mui/material';
 import { fetchTeams } from '../services/espnApi';
-
-interface Team {
-  id: string;
-  name: string;
-  division: string;
-  conference: string;
-}
+import { Team } from '../types';
 
 const TeamList: React.FC = () => {
   const [teams, setTeams] = useState<Team[]>([]);
@@ -45,6 +39,7 @@ const TeamList: React.FC = () => {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell>Logo</TableCell>
                 <TableCell>Team Name</TableCell>
                 <TableCell>Division</TableCell>
                 <TableCell>Conference</TableCell>
@@ -53,6 +48,9 @@ const TeamList: React.FC = () => {
             <TableBody>
               {teams.map((team) => (
                 <TableRow key={team.id}>
+                  <TableCell>
+                    <Avatar src={team.logoUrl} alt={team.name} className="team-logo" />
+                  </TableCell>
                   <TableCell>{team.name}</TableCell>
                   <TableCell>{team.division}</TableCell>
                   <TableCell>{team.conference}</TableCell>

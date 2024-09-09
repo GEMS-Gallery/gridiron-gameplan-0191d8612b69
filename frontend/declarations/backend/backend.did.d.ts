@@ -7,6 +7,7 @@ export interface Team {
   'conference' : string,
   'name' : string,
   'division' : string,
+  'logoUrl' : string,
 }
 export interface TeamStanding {
   'ties' : bigint,
