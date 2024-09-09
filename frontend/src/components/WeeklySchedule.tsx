@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography } from '@mui/material';
-import { backend } from '../../declarations/backend';
+import { fetchWeeklySchedule } from '../services/nflApi';
 
 interface Game {
   id: string;
   homeTeam: string;
   awayTeam: string;
-  date: bigint;
+  date: string;
   venue: string;
   homeScore: number | null;
   awayScore: number | null;
@@ -19,14 +19,10 @@ const WeeklySchedule: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchGames = async () => {
+    const getGames = async () => {
       try {
-        const result = await backend.getWeeklySchedule(BigInt(1));
-        if ('ok' in result) {
-          setGames(result.ok);
-        } else {
-          setError(result.err);
-        }
+        const fetchedGames = await fetchWeeklySchedule(1);
+        setGames(fetchedGames);
       } catch (err) {
         setError('Failed to fetch games');
       } finally {
@@ -34,7 +30,7 @@ const WeeklySchedule: React.FC = () => {
       }
     };
 
-    fetchGames();
+    getGames();
   }, []);
 
   if (loading) {
@@ -60,7 +56,7 @@ const WeeklySchedule: React.FC = () => {
         <TableBody>
           {games.map((game) => (
             <TableRow key={game.id}>
-              <TableCell>{new Date(Number(game.date) / 1000000).toLocaleDateString()}</TableCell>
+              <TableCell>{new Date(game.date).toLocaleDateString()}</TableCell>
               <TableCell>{game.homeTeam}</TableCell>
               <TableCell>{game.awayTeam}</TableCell>
               <TableCell>{game.venue}</TableCell>

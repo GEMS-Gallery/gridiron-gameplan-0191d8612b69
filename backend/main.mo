@@ -16,16 +16,6 @@ actor {
     conference: Text;
   };
 
-  type Game = {
-    id: Text;
-    homeTeam: Text;
-    awayTeam: Text;
-    date: Time.Time;
-    venue: Text;
-    homeScore: ?Nat;
-    awayScore: ?Nat;
-  };
-
   type TeamStanding = {
     teamId: Text;
     wins: Nat;
@@ -34,7 +24,6 @@ actor {
   };
 
   stable var teams: [Team] = [];
-  stable var schedule: [[Game]] = [];
   stable var standings: [TeamStanding] = [];
 
   // Initialize data (in a real scenario, this would be populated from a trusted source)
@@ -43,22 +32,6 @@ actor {
       { id = "NE"; name = "New England Patriots"; division = "AFC East"; conference = "AFC" },
       { id = "BUF"; name = "Buffalo Bills"; division = "AFC East"; conference = "AFC" },
       // Add more teams...
-    ];
-
-    schedule := [
-      [
-        {
-          id = "2023_W1_NE_BUF";
-          homeTeam = "NE";
-          awayTeam = "BUF";
-          date = 1631232000000000000; // Example timestamp
-          venue = "Gillette Stadium";
-          homeScore = null;
-          awayScore = null;
-        },
-        // Add more games...
-      ],
-      // Add more weeks...
     ];
 
     standings := [
@@ -70,22 +43,6 @@ actor {
 
   public query func getTeams() : async [Team] {
     return teams;
-  };
-
-  public query func getWeeklySchedule(week: Nat) : async Result.Result<[Game], Text> {
-    if (week > 0 and week <= schedule.size()) {
-      #ok(schedule[week - 1])
-    } else {
-      #err("Invalid week number")
-    }
-  };
-
-  public query func getGameDetails(gameId: Text) : async Result.Result<Game, Text> {
-    let game = Array.find<Game>(Array.flatten<Game>(schedule), func(g) { g.id == gameId });
-    switch (game) {
-      case (?g) { #ok(g) };
-      case (null) { #err("Game not found") };
-    }
   };
 
   public query func getStandings() : async [TeamStanding] {

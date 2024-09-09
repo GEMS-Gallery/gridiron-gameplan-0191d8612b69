@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography } from '@mui/material';
-import { backend } from '../../declarations/backend';
+import { fetchTeams } from '../services/nflApi';
 
 interface Team {
   id: string;
@@ -15,10 +15,10 @@ const TeamList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchTeams = async () => {
+    const getTeams = async () => {
       try {
-        const result = await backend.getTeams();
-        setTeams(result);
+        const fetchedTeams = await fetchTeams();
+        setTeams(fetchedTeams);
       } catch (err) {
         setError('Failed to fetch teams');
       } finally {
@@ -26,7 +26,7 @@ const TeamList: React.FC = () => {
       }
     };
 
-    fetchTeams();
+    getTeams();
   }, []);
 
   if (loading) {

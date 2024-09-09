@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, Typography, CircularProgress } from '@mui/material';
-import { backend } from '../../declarations/backend';
+import { fetchGameDetails } from '../services/nflApi';
 
 interface Game {
   id: string;
   homeTeam: string;
   awayTeam: string;
-  date: bigint;
+  date: string;
   venue: string;
   homeScore: number | null;
   awayScore: number | null;
@@ -20,16 +20,12 @@ const GameDetails: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchGameDetails = async () => {
+    const getGameDetails = async () => {
       if (!id) return;
 
       try {
-        const result = await backend.getGameDetails(id);
-        if ('ok' in result) {
-          setGame(result.ok);
-        } else {
-          setError(result.err);
-        }
+        const fetchedGame = await fetchGameDetails(id);
+        setGame(fetchedGame);
       } catch (err) {
         setError('Failed to fetch game details');
       } finally {
@@ -37,7 +33,7 @@ const GameDetails: React.FC = () => {
       }
     };
 
-    fetchGameDetails();
+    getGameDetails();
   }, [id]);
 
   if (loading) {
@@ -59,7 +55,7 @@ const GameDetails: React.FC = () => {
           {game.homeTeam} vs {game.awayTeam}
         </Typography>
         <Typography color="text.secondary">
-          Date: {new Date(Number(game.date) / 1000000).toLocaleString()}
+          Date: {new Date(game.date).toLocaleString()}
         </Typography>
         <Typography color="text.secondary">
           Venue: {game.venue}

@@ -1,4 +1,3 @@
-type Time = int;
 type TeamStanding = 
  record {
    losses: nat;
@@ -13,30 +12,8 @@ type Team =
    id: text;
    name: text;
  };
-type Result_1 = 
- variant {
-   err: text;
-   ok: Game;
- };
-type Result = 
- variant {
-   err: text;
-   ok: vec Game;
- };
-type Game = 
- record {
-   awayScore: opt nat;
-   awayTeam: text;
-   date: Time;
-   homeScore: opt nat;
-   homeTeam: text;
-   id: text;
-   venue: text;
- };
 service : {
-  getGameDetails: (text) -> (Result_1) query;
   getStandings: () -> (vec TeamStanding) query;
   getTeams: () -> (vec Team) query;
-  getWeeklySchedule: (nat) -> (Result) query;
   initialize: () -> ();
 }
