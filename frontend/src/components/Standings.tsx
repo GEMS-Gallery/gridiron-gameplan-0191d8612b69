@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent } from '@mui/material';
 import { fetchStandings } from '../services/nflApi';
 
 interface TeamStanding {
@@ -38,28 +38,33 @@ const Standings: React.FC = () => {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Team</TableCell>
-            <TableCell>Wins</TableCell>
-            <TableCell>Losses</TableCell>
-            <TableCell>Ties</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {standings.map((standing) => (
-            <TableRow key={standing.teamId}>
-              <TableCell>{standing.teamId}</TableCell>
-              <TableCell>{standing.wins}</TableCell>
-              <TableCell>{standing.losses}</TableCell>
-              <TableCell>{standing.ties}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Card className="card">
+      <CardContent>
+        <Typography variant="h2" gutterBottom>NFL Standings</Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Team</TableCell>
+                <TableCell>Wins</TableCell>
+                <TableCell>Losses</TableCell>
+                <TableCell>Ties</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {standings.map((standing) => (
+                <TableRow key={standing.teamId}>
+                  <TableCell>{standing.teamId}</TableCell>
+                  <TableCell>{standing.wins}</TableCell>
+                  <TableCell>{standing.losses}</TableCell>
+                  <TableCell>{standing.ties}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </CardContent>
+    </Card>
   );
 };
 

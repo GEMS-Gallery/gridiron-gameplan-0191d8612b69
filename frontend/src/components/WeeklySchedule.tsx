@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent } from '@mui/material';
 import { fetchWeeklySchedule } from '../services/nflApi';
 
 interface Game {
@@ -42,37 +42,43 @@ const WeeklySchedule: React.FC = () => {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Home Team</TableCell>
-            <TableCell>Away Team</TableCell>
-            <TableCell>Venue</TableCell>
-            <TableCell>Score</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {games.map((game) => (
-            <TableRow key={game.id}>
-              <TableCell>{new Date(game.date).toLocaleDateString()}</TableCell>
-              <TableCell>{game.homeTeam}</TableCell>
-              <TableCell>{game.awayTeam}</TableCell>
-              <TableCell>{game.venue}</TableCell>
-              <TableCell>
-                {game.homeScore !== null && game.awayScore !== null
-                  ? `${game.homeScore} - ${game.awayScore}`
-                  : 'TBD'}
-              </TableCell>
-              <TableCell>
-                <Link to={`/game/${game.id}`}>Details</Link>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Card className="card">
+      <CardContent>
+        <Typography variant="h2" gutterBottom>Weekly Schedule</Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Date</TableCell>
+                <TableCell>Home Team</TableCell>
+                <TableCell>Away Team</TableCell>
+                <TableCell>Venue</TableCell>
+                <TableCell>Score</TableCell>
+                <TableCell>Details</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {games.map((game) => (
+                <TableRow key={game.id}>
+                  <TableCell>{new Date(game.date).toLocaleDateString()}</TableCell>
+                  <TableCell>{game.homeTeam}</TableCell>
+                  <TableCell>{game.awayTeam}</TableCell>
+                  <TableCell>{game.venue}</TableCell>
+                  <TableCell>
+                    {game.homeScore !== null && game.awayScore !== null
+                      ? `${game.homeScore} - ${game.awayScore}`
+                      : 'TBD'}
+                  </TableCell>
+                  <TableCell>
+                    <Link to={`/game/${game.id}`}>View Details</Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </CardContent>
+    </Card>
   );
 };
 

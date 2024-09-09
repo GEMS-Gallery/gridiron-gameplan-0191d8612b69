@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent } from '@mui/material';
 import { fetchTeams } from '../services/nflApi';
 
 interface Team {
@@ -38,26 +38,31 @@ const TeamList: React.FC = () => {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Team Name</TableCell>
-            <TableCell>Division</TableCell>
-            <TableCell>Conference</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {teams.map((team) => (
-            <TableRow key={team.id}>
-              <TableCell>{team.name}</TableCell>
-              <TableCell>{team.division}</TableCell>
-              <TableCell>{team.conference}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Card className="card">
+      <CardContent>
+        <Typography variant="h2" gutterBottom>NFL Teams</Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Team Name</TableCell>
+                <TableCell>Division</TableCell>
+                <TableCell>Conference</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {teams.map((team) => (
+                <TableRow key={team.id}>
+                  <TableCell>{team.name}</TableCell>
+                  <TableCell>{team.division}</TableCell>
+                  <TableCell>{team.conference}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </CardContent>
+    </Card>
   );
 };
 

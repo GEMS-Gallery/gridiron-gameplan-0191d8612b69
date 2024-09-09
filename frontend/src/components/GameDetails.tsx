@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Card, CardContent, Typography, CircularProgress } from '@mui/material';
+import { Card, CardContent, Typography, CircularProgress, Grid, Paper } from '@mui/material';
 import { fetchGameDetails } from '../services/nflApi';
 
 interface Game {
@@ -49,21 +49,28 @@ const GameDetails: React.FC = () => {
   }
 
   return (
-    <Card>
+    <Card className="card">
       <CardContent>
-        <Typography variant="h5" component="div">
-          {game.homeTeam} vs {game.awayTeam}
-        </Typography>
-        <Typography color="text.secondary">
+        <Typography variant="h2" gutterBottom>Game Details</Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <Paper elevation={3} sx={{ p: 2 }}>
+              <Typography variant="h5" gutterBottom>{game.homeTeam}</Typography>
+              <Typography variant="h3">{game.homeScore ?? 'TBD'}</Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Paper elevation={3} sx={{ p: 2 }}>
+              <Typography variant="h5" gutterBottom>{game.awayTeam}</Typography>
+              <Typography variant="h3">{game.awayScore ?? 'TBD'}</Typography>
+            </Paper>
+          </Grid>
+        </Grid>
+        <Typography variant="h6" sx={{ mt: 2 }}>
           Date: {new Date(game.date).toLocaleString()}
         </Typography>
-        <Typography color="text.secondary">
+        <Typography variant="h6">
           Venue: {game.venue}
-        </Typography>
-        <Typography variant="body2">
-          Score: {game.homeScore !== null && game.awayScore !== null
-            ? `${game.homeScore} - ${game.awayScore}`
-            : 'TBD'}
         </Typography>
       </CardContent>
     </Card>
