@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent } from '@mui/material';
-import { fetchStandings } from '../services/nflApi';
+import { fetchStandings } from '../services/espnApi';
 
 interface TeamStanding {
   teamId: string;
+  teamName: string;
   wins: number;
   losses: number;
   ties: number;
+  winPercentage: number;
 }
 
 const Standings: React.FC = () => {
@@ -40,7 +42,7 @@ const Standings: React.FC = () => {
   return (
     <Card className="card">
       <CardContent>
-        <Typography variant="h2" gutterBottom>NFL Standings</Typography>
+        <Typography variant="h2" gutterBottom>NFL Standings 2024-2025</Typography>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -49,15 +51,17 @@ const Standings: React.FC = () => {
                 <TableCell>Wins</TableCell>
                 <TableCell>Losses</TableCell>
                 <TableCell>Ties</TableCell>
+                <TableCell>Win %</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {standings.map((standing) => (
                 <TableRow key={standing.teamId}>
-                  <TableCell>{standing.teamId}</TableCell>
+                  <TableCell>{standing.teamName}</TableCell>
                   <TableCell>{standing.wins}</TableCell>
                   <TableCell>{standing.losses}</TableCell>
                   <TableCell>{standing.ties}</TableCell>
+                  <TableCell>{standing.winPercentage.toFixed(3)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

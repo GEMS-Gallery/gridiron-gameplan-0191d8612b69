@@ -12,7 +12,7 @@ const App: React.FC = () => {
       <AppBar position="static" elevation={0}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            NFL Schedule
+            NFL Schedule 2024-2025
           </Typography>
           <Button color="inherit" component={Link} to="/">Schedule</Button>
           <Button color="inherit" component={Link} to="/teams">Teams</Button>

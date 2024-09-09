@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, Typography, CircularProgress, Grid, Paper } from '@mui/material';
-import { fetchGameDetails } from '../services/nflApi';
+import { fetchGameDetails } from '../services/espnApi';
 
 interface Game {
   id: string;
@@ -11,6 +11,9 @@ interface Game {
   venue: string;
   homeScore: number | null;
   awayScore: number | null;
+  status: string;
+  quarter?: string;
+  timeRemaining?: string;
 }
 
 const GameDetails: React.FC = () => {
@@ -72,6 +75,19 @@ const GameDetails: React.FC = () => {
         <Typography variant="h6">
           Venue: {game.venue}
         </Typography>
+        <Typography variant="h6">
+          Status: {game.status}
+        </Typography>
+        {game.quarter && (
+          <Typography variant="h6">
+            Quarter: {game.quarter}
+          </Typography>
+        )}
+        {game.timeRemaining && (
+          <Typography variant="h6">
+            Time Remaining: {game.timeRemaining}
+          </Typography>
+        )}
       </CardContent>
     </Card>
   );

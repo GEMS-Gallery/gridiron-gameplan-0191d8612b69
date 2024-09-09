@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent } from '@mui/material';
-import { fetchTeams } from '../services/nflApi';
+import { fetchTeams } from '../services/espnApi';
 
 interface Team {
   id: string;
@@ -40,7 +40,7 @@ const TeamList: React.FC = () => {
   return (
     <Card className="card">
       <CardContent>
-        <Typography variant="h2" gutterBottom>NFL Teams</Typography>
+        <Typography variant="h2" gutterBottom>NFL Teams 2024-2025</Typography>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>

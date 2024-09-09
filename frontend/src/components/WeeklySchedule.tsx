@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent } from '@mui/material';
-import { fetchWeeklySchedule } from '../services/nflApi';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography, Card, CardContent, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { fetchWeeklySchedule } from '../services/espnApi';
 
 interface Game {
   id: string;
@@ -17,11 +17,13 @@ const WeeklySchedule: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [week, setWeek] = useState(1);
 
   useEffect(() => {
     const getGames = async () => {
+      setLoading(true);
       try {
-        const fetchedGames = await fetchWeeklySchedule(1);
+        const fetchedGames = await fetchWeeklySchedule(week);
         setGames(fetchedGames);
       } catch (err) {
         setError('Failed to fetch games');
@@ -31,7 +33,7 @@ const WeeklySchedule: React.FC = () => {
     };
 
     getGames();
-  }, []);
+  }, [week]);
 
   if (loading) {
     return <CircularProgress />;
@@ -44,7 +46,20 @@ const WeeklySchedule: React.FC = () => {
   return (
     <Card className="card">
       <CardContent>
-        <Typography variant="h2" gutterBottom>Weekly Schedule</Typography>
+        <Typography variant="h2" gutterBottom>2024-2025 NFL Schedule</Typography>
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="week-select-label">Week</InputLabel>
+          <Select
+            labelId="week-select-label"
+            value={week}
+            label="Week"
+            onChange={(e) => setWeek(Number(e.target.value))}
+          >
+            {[...Array(18)].map((_, i) => (
+              <MenuItem key={i + 1} value={i + 1}>Week {i + 1}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
